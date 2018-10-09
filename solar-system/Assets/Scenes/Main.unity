@@ -209,6 +209,7 @@ GameObject:
   - component: {fileID: 76467826}
   - component: {fileID: 76467825}
   - component: {fileID: 76467824}
+  - component: {fileID: 76467827}
   m_Layer: 0
   m_Name: Moon
   m_TagString: Untagged
@@ -223,7 +224,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 76467822}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.08, y: 0, z: 0}
+  m_LocalPosition: {x: 1.051, y: 0, z: 0}
   m_LocalScale: {x: 0.15873015, y: 0.15873015, z: 0.15873015}
   m_Children: []
   m_Father: {fileID: 243343061}
@@ -283,6 +284,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 76467822}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &76467827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 76467822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40cca2e71cb64104fb4f6780819b892e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
