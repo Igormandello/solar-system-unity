@@ -19,9 +19,12 @@ public class PlanetManager : MonoBehaviour
         { "Neptune", 0.3f }
     };
 
+    private GameObject focused = null;
+    private GameObject camera;
+
 	void Start ()
     {
-        GameObject camera = GameObject.Find("Main Camera");
+        this.camera = GameObject.Find("Main Camera");
 
         GameObject sun = GameObject.Find("Sun");
         GameObject[] planets = GameObject.FindGameObjectsWithTag("Planet");
@@ -32,8 +35,23 @@ public class PlanetManager : MonoBehaviour
             rotateObj.speed = speed[planets[i].name] * scale;
 
             PlanetController controller = planets[i].AddComponent<PlanetController>();
-            controller.camera = camera;
+            controller.OnPlanetClick += FocusCamera;
             controller.speed = speed[planets[i].name] * scale;
         }
 	}
+
+    private void Update()
+    {
+        if (this.focused != null)
+        {
+            Vector3 dir = this.focused.transform.position - this.camera.transform.position;
+            this.camera.transform.rotation = Quaternion.RotateTowards(this.camera.transform.rotation, Quaternion.LookRotation(dir), 1);
+        }
+            
+    }
+
+    private void FocusCamera(GameObject planet)
+    {
+        this.focused = planet;
+    }
 }
