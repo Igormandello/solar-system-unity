@@ -21,6 +21,8 @@ public class PlanetManager : MonoBehaviour
 
 	void Start ()
     {
+        GameObject camera = GameObject.Find("Main Camera");
+
         GameObject sun = GameObject.Find("Sun");
         GameObject[] planets = GameObject.FindGameObjectsWithTag("Planet");
 
@@ -29,9 +31,9 @@ public class PlanetManager : MonoBehaviour
             rotateObj.target = sun;
             rotateObj.speed = speed[planets[i].name] * scale;
 
-            rotateObj = planets[i].AddComponent<RotateAround>();
-            rotateObj.target = planets[i];
-            rotateObj.speed = speed[planets[i].name] * scale;
+            PlanetController controller = planets[i].AddComponent<PlanetController>();
+            controller.camera = camera;
+            controller.speed = speed[planets[i].name] * scale;
         }
 	}
 }
