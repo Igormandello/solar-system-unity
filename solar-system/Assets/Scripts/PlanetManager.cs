@@ -4,9 +4,19 @@ using UnityEngine;
 
 public class PlanetManager : MonoBehaviour
 {
-    private readonly float[] speed = new float[]
+    [Range(0.1f, 3)]
+    public const int scale = 1;
+
+    private readonly Dictionary<string, float> speed = new Dictionary<string, float>
     {
-        3, 2, 1.8f, 1.5f, 0.8f, 0.6f, 0.4f, 0.3f
+        { "Mercury", 3 },
+        { "Venus", 2 },
+        { "Earth", 1.8f },
+        { "Mars", 1.5f },
+        { "Jupiter", 0.8f },
+        { "Saturn", 0.6f },
+        { "Uranus", 0.4f },
+        { "Neptune", 0.3f }
     };
 
 	void Start ()
@@ -17,7 +27,11 @@ public class PlanetManager : MonoBehaviour
         for (int i = 0; i < planets.Length; i++) {
             RotateAround rotateObj = planets[i].AddComponent<RotateAround>();
             rotateObj.target = sun;
-            rotateObj.speed = speed[planets.Length - i - 1];
+            rotateObj.speed = speed[planets[i].name] * scale;
+
+            rotateObj = planets[i].AddComponent<RotateAround>();
+            rotateObj.target = planets[i];
+            rotateObj.speed = speed[planets[i].name] * scale;
         }
 	}
 }
