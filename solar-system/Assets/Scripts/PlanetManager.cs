@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlanetManager : MonoBehaviour
 {
-    public GameObject jupiterMoon;
+    public GameObject jupiterMoon, meteor;
 
     [Range(0.1f, 3)]
     public float scale = 1;
@@ -24,6 +24,7 @@ public class PlanetManager : MonoBehaviour
 
     private GameObject focused = null;
     private GameObject camera;
+    private AudioSource audio = null;
 
 	void Start ()
     {
@@ -31,6 +32,7 @@ public class PlanetManager : MonoBehaviour
 
         GameObject sun = GameObject.Find("Sun");
         GameObject[] planets = GameObject.FindGameObjectsWithTag("Planet");
+        camera.transform.LookAt(sun.transform);
 
         for (int i = 0; i < planets.Length; i++) {
             RotateAround rotateObj = planets[i].AddComponent<RotateAround>();
@@ -42,6 +44,11 @@ public class PlanetManager : MonoBehaviour
             controller.speed = speed[planets[i].name] * scale;
         }
 
+        GameObject moon = GameObject.Find("Moon");
+        PlanetController moonController = moon.AddComponent<PlanetController>();
+        moonController.OnPlanetClick += FocusCamera;
+        moonController.speed = 2 * scale;
+
         PlanetController sunController = sun.AddComponent<PlanetController>();
         sunController.OnPlanetClick += FocusCamera;
         sunController.speed = speed["Sun"] * scale;
@@ -51,8 +58,8 @@ public class PlanetManager : MonoBehaviour
         {
             GameObject g = Instantiate(jupiterMoon);
             g.transform.parent = jupiter.transform;
-            float scale = Random.Range(0.02f, 0.1f);
-            g.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+            float scale = Random.Range(0.01f, 0.05f);
+            g.transform.localScale = new Vector3(scale, scale, scale);
 
             float multX = 1, multZ = 1;
             if (Random.Range(0, 1f) > 0.5f)
@@ -67,6 +74,20 @@ public class PlanetManager : MonoBehaviour
             rotateObj.target = jupiter;
             rotateObj.speed = Random.Range(0.5f, 3f);
         }
+
+        for (int n = 0; n < 200; n++)
+        {
+            GameObject g = Instantiate(meteor);
+
+            float z = Random.Range(-40, 40f);
+            float x = ResolveCircle(z);
+
+            g.transform.position = new Vector3(x, 0, z);
+
+            RotateAround rotateObj = g.AddComponent<RotateAround>();
+            rotateObj.target = sun;
+            rotateObj.speed = Random.Range(0.5f, 3f);
+        }
     }
 
     private void Update()
@@ -74,7 +95,7 @@ public class PlanetManager : MonoBehaviour
         if (this.focused != null)
         {
             Vector3 dir = this.focused.transform.position - this.camera.transform.position;
-            this.camera.transform.rotation = Quaternion.RotateTowards(this.camera.transform.rotation, Quaternion.LookRotation(dir), 1);
+            this.camera.transform.rotation = Quaternion.RotateTowards(this.camera.transform.rotation, Quaternion.LookRotation(dir), 1.5f);
         }
             
     }
@@ -82,5 +103,23 @@ public class PlanetManager : MonoBehaviour
     private void FocusCamera(GameObject planet)
     {
         this.focused = planet;
+
+        if (this.audio != null)
+            this.audio.Stop();
+
+        this.audio = planet.GetComponent<AudioSource>();
+        if (this.audio != null)
+            audio.Play();
+    }
+    
+    private float ResolveCircle(float z)
+    {
+        float powered = 1400 - Random.Range(-300, 50f) - Mathf.Pow(z, 2);
+        if (powered < 0)
+            return 0;
+        else if (Random.Range(0, 1f) < 0.5f)
+            return Mathf.Sqrt(powered);
+        else
+            return -Mathf.Sqrt(powered);
     }
 }
