@@ -7,7 +7,7 @@ public class PlanetManager : MonoBehaviour
     public GameObject jupiterMoon;
 
     [Range(0.1f, 3)]
-    public const int scale = 1;
+    public float scale = 1;
 
     private readonly Dictionary<string, float> speed = new Dictionary<string, float>
     {
@@ -51,12 +51,21 @@ public class PlanetManager : MonoBehaviour
         {
             GameObject g = Instantiate(jupiterMoon);
             g.transform.parent = jupiter.transform;
+            float scale = Random.Range(0.02f, 0.1f);
             g.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-            g.transform.localPosition = new Vector3(Random.Range(-1, 1), Random.Range(-0.6f, 0.6f), Random.Range(-1, 1));
+
+            float multX = 1, multZ = 1;
+            if (Random.Range(0, 1f) > 0.5f)
+                multX = -1;
+
+            if (Random.Range(0, 1f) > 0.5f)
+                multZ = -1;
+
+            g.transform.localPosition = new Vector3(multX * Random.Range(1, 0.5f), Random.Range(-0.6f, 0.6f), multZ * Random.Range(1, 0.5f));
 
             RotateAround rotateObj = g.AddComponent<RotateAround>();
             rotateObj.target = jupiter;
-            rotateObj.speed = Random.Range(0.5f, 1.5f);
+            rotateObj.speed = Random.Range(0.5f, 3f);
         }
     }
 
