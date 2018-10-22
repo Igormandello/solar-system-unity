@@ -9,9 +9,8 @@ public class PlanetManager : MonoBehaviour
     [Range(0.1f, 3)]
     public float scale = 1;
 
-    private readonly Dictionary<string, float> speed = new Dictionary<string, float>
+    private readonly Dictionary<string, float> translationSpeed = new Dictionary<string, float>
     {
-        { "Sun", 2 },
         { "Mercury", 3 },
         { "Venus", 2 },
         { "Earth", 1.8f },
@@ -20,6 +19,19 @@ public class PlanetManager : MonoBehaviour
         { "Saturn", 0.6f },
         { "Uranus", 0.4f },
         { "Neptune", 0.3f }
+    };
+
+    private readonly Dictionary<string, float> rotationSpeed = new Dictionary<string, float>
+    {
+        { "Sun", 10f },
+        { "Mercury", 6f },
+        { "Venus", 7f },
+        { "Earth", 8f },
+        { "Mars", 10f },
+        { "Jupiter", 19f },
+        { "Saturn", 20f },
+        { "Uranus", -22f },
+        { "Neptune", 25f }
     };
 
     private GameObject focused = null;
@@ -37,11 +49,11 @@ public class PlanetManager : MonoBehaviour
         for (int i = 0; i < planets.Length; i++) {
             RotateAround rotateObj = planets[i].AddComponent<RotateAround>();
             rotateObj.target = sun;
-            rotateObj.speed = speed[planets[i].name] * scale;
+            rotateObj.speed = translationSpeed[planets[i].name] * scale;
 
             PlanetController controller = planets[i].AddComponent<PlanetController>();
             controller.OnPlanetClick += FocusCamera;
-            controller.speed = speed[planets[i].name] * scale;
+            controller.speed = rotationSpeed[planets[i].name] * scale;
         }
 
         GameObject moon = GameObject.Find("Moon");
@@ -51,28 +63,17 @@ public class PlanetManager : MonoBehaviour
 
         PlanetController sunController = sun.AddComponent<PlanetController>();
         sunController.OnPlanetClick += FocusCamera;
-        sunController.speed = speed["Sun"] * scale;
+        sunController.speed = rotationSpeed["Sun"] * scale;
 
-        GameObject jupiter = GameObject.Find("Jupiter");
-        for (int n = 0; n < 79; n++)
+        GameObject[] moons = GameObject.FindGameObjectsWithTag("Moon");
+        for (int i = 0; i < moons.Length; i++)
         {
-            GameObject g = Instantiate(jupiterMoon);
-            g.transform.parent = jupiter.transform;
-            float scale = Random.Range(0.01f, 0.05f);
-            g.transform.localScale = new Vector3(scale, scale, scale);
+            RotateAround rotateObj = moons[i].AddComponent<RotateAround>();
+            rotateObj.target = moons[i].transform.parent.gameObject;
+            rotateObj.speed = Random.Range(1, 5f);
 
-            float multX = 1, multZ = 1;
-            if (Random.Range(0, 1f) > 0.5f)
-                multX = -1;
-
-            if (Random.Range(0, 1f) > 0.5f)
-                multZ = -1;
-
-            g.transform.localPosition = new Vector3(multX * Random.Range(1, 0.5f), Random.Range(-0.6f, 0.6f), multZ * Random.Range(1, 0.5f));
-
-            RotateAround rotateObj = g.AddComponent<RotateAround>();
-            rotateObj.target = jupiter;
-            rotateObj.speed = Random.Range(0.5f, 3f);
+            PlanetController controller = moons[i].AddComponent<PlanetController>();
+            controller.speed = Random.Range(1, 2f);
         }
 
         for (int n = 0; n < 200; n++)
@@ -110,6 +111,8 @@ public class PlanetManager : MonoBehaviour
         this.audio = planet.GetComponent<AudioSource>();
         if (this.audio != null)
             audio.Play();
+
+        this.camera.GetComponent<Camera>().fieldOfView = Mathf.Clamp(planet.transform.localScale.x * 5, 20, 60);
     }
     
     private float ResolveCircle(float z)
