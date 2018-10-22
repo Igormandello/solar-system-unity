@@ -1128,7 +1128,6 @@ GameObject:
   m_Component:
   - component: {fileID: 835769107}
   - component: {fileID: 835769106}
-  - component: {fileID: 835769105}
   m_Layer: 0
   m_Name: Minimap Camera
   m_TagString: Untagged
@@ -1136,13 +1135,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &835769105
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 835769104}
-  m_Enabled: 1
 --- !u!20 &835769106
 Camera:
   m_ObjectHideFlags: 0
@@ -1151,8 +1143,8 @@ Camera:
   m_GameObject: {fileID: 835769104}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -1161,13 +1153,13 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 0.25
-    height: 0.25
+    width: 0.35
+    height: 0.35
   near clip plane: 1
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 63.06
+  orthographic size: 60
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
